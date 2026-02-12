@@ -1,0 +1,45 @@
+# Dependencies
+node_modules
+
+# Build output
+dist
+build
+*.tsbuildinfo
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+~$*
+.~*
+
+# Claude Code (local-only files)
+CLAUDE.local.md
+.claude/settings.local.json
+.claude/plans/
+.claude/spikes/
+.claude/docs/
+
+# Test artifacts
+coverage/
+test-results/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Package managers
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
