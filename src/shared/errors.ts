@@ -1,6 +1,6 @@
 // Typed error hierarchy for structured error handling across tool handlers
 
-interface ErrorMetadata {
+export interface ErrorMetadata {
   toolName: string;
   operation: string;
   correlationId: string;
