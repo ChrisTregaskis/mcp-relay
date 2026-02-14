@@ -5,6 +5,16 @@ import type { ErrorMetadata } from './errors.js';
 
 const DEFAULT_TIMEOUT_MS = 30_000;
 
+/** Strip query string and fragment to avoid leaking tokens in error messages (OWASP). */
+function safeUrl(raw: string): string {
+  try {
+    const parsed = new URL(raw);
+    return `${parsed.origin}${parsed.pathname}`;
+  } catch {
+    return '<malformed-url>';
+  }
+}
+
 interface HttpRequestOptions {
   url: string;
   method?: string;
@@ -40,13 +50,15 @@ export async function httpRequest(options: HttpRequestOptions): Promise<HttpResp
       body: responseBody,
     };
   } catch (error) {
+    const safe = safeUrl(url);
+
     if (error instanceof DOMException && error.name === 'AbortError') {
-      throw new ExternalServiceError(`Request to ${url} timed out after ${timeoutMs}ms`, metadata);
+      throw new ExternalServiceError(`Request to ${safe} timed out after ${timeoutMs}ms`, metadata);
     }
 
     const message = error instanceof Error ? error.message : 'Unknown network error';
 
-    throw new ExternalServiceError(`Request to ${url} failed: ${message}`, metadata);
+    throw new ExternalServiceError(`Request to ${safe} failed: ${message}`, metadata);
   } finally {
     clearTimeout(timeoutId);
   }
