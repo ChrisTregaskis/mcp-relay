@@ -98,10 +98,10 @@ The agent runs when:
 Execute:
 
 ```bash
-npm run lint           # ESLint violations
-npm run type-check     # TypeScript errors
-npm run format:check   # Formatting issues
-npm run test           # Unit tests
+pnpm lint              # ESLint violations
+pnpm typecheck         # TypeScript errors
+pnpm format:check      # Formatting issues
+pnpm test              # Unit tests
 ```
 
 ### Step 4: Compile Findings

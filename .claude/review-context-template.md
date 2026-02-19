@@ -45,9 +45,9 @@ What isn't perfect yet?
 
 How was this tested? What should the reviewer verify?
 
-- [ ] Unit tests pass (`npm run test`)
-- [ ] Type check passes (`npm run type-check`)
-- [ ] Lint passes (`npm run lint`)
+- [ ] Unit tests pass (`pnpm test`)
+- [ ] Type check passes (`pnpm typecheck`)
+- [ ] Lint passes (`pnpm lint`)
 - [ ] Manual testing steps: ...
 
 ## MCP Protocol Compliance

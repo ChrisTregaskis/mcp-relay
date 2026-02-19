@@ -608,7 +608,7 @@ const ServerConfigSchema = z.object({
 | Formatting      | Prettier                     | 2-space indent, trailing commas ES5, semicolons required                                                                                        |
 | Linting         | ESLint + `typescript-eslint` | Strict TypeScript rules, no `any` without justification                                                                                         |
 | Build           | `tsc` (TypeScript compiler)  | ESM output to `dist/`; no bundler needed                                                                                                        |
-| Git Hooks       | Husky                        | Pre-commit: lint + format. Pre-push: lint + format + type-check + build                                                                         |
+| Git Hooks       | Husky                        | Pre-commit: lint + format. Pre-push: lint + format + typecheck + build                                                                          |
 | Module Format   | ESM                          | `"type": "module"` in `package.json`; `NodeNext` module resolution                                                                              |
 
 ### Testing (Deferred)
@@ -622,7 +622,7 @@ Testing is deferred for the POC to reduce overhead during rapid iteration. Zod v
 **Git hooks (Husky):** Included.
 
 - **Pre-commit:** `pnpm lint && pnpm format:check`
-- **Pre-push:** `pnpm lint && pnpm format:check && pnpm type-check && pnpm build`
+- **Pre-push:** `pnpm lint && pnpm format:check && pnpm typecheck && pnpm build`
 
 **CI/CD:** Deferred — no pipeline until there is something to deploy.
 
@@ -684,7 +684,7 @@ mcp-hub/
 │
 ├── .husky/
 │   ├── pre-commit                   # pnpm lint && pnpm format:check
-│   └── pre-push                     # pnpm lint && pnpm format:check && pnpm type-check && pnpm build
+│   └── pre-push                     # pnpm lint && pnpm format:check && pnpm typecheck && pnpm build
 │
 ├── .claude/                          # Claude Code configuration
 │

@@ -20,7 +20,7 @@ A reusable **team AI tooling layer** built as an MCP server. Rather than each de
 
 This project emerged from the [deck-localiser](../deck-localiser/) POC, where we identified the need for AI image generation tooling (Nanobanana) but found no pre-built MCP connector. Rather than building a one-off integration, we recognised the opportunity for a reusable team tooling layer.
 
-See `docs/mcp-integration-strategy.md` for the full background and vision.
+See `.claude/docs/mcp-integration-strategy.md` for the full background and vision.
 
 ## Tech Stack (Planned)
 
@@ -36,10 +36,11 @@ See `docs/mcp-integration-strategy.md` for the full background and vision.
 ```
 mcp-hub/
 ├── docs/                          # Source of truth (committed)
-│   ├── mcp-integration-strategy.md  # Seed strategy document
-│   └── architecture.md             # System design (TBD)
-├── src/                            # Application code (TBD)
-├── .claude/                        # Claude Code configuration
+│   └── architecture.md             # System design (v0.1)
+├── .claude/
+│   └── docs/
+│       └── mcp-integration-strategy.md  # Seed strategy document
+├── src/                            # Application code
 ├── CLAUDE.md                       # Project-wide AI instructions
 └── README.md                       # This file
 ```
@@ -49,7 +50,7 @@ mcp-hub/
 > **Note:** No application code exists yet. This section will be updated after architecture approval.
 
 1. Clone the repository
-2. Review `docs/mcp-integration-strategy.md` for project context
+2. Review `.claude/docs/mcp-integration-strategy.md` for project context
 3. Review `docs/architecture.md` (once drafted) for system design
 
 ## Visual References

@@ -19,10 +19,11 @@ MCP Hub — a custom Model Context Protocol server that exposes shared AI tools 
 ```
 mcp-hub/
 ├── docs/                          # Source of truth (committed)
-│   ├── mcp-integration-strategy.md  # Seed strategy document
-│   └── architecture.md             # System design (TBD)
-├── src/                            # Application code (TBD — after architecture approval)
-├── .claude/                        # Claude Code configuration
+│   └── architecture.md             # System design (v0.1)
+├── .claude/
+│   └── docs/
+│       └── mcp-integration-strategy.md  # Seed strategy document
+├── src/                            # Application code
 └── [root config files]
 ```
 
@@ -70,28 +71,26 @@ mcp-hub/
 
 ```bash
 # Development
-npm run dev                 # Start development server (watch mode)
-npm run build               # Compile TypeScript
+pnpm dev                    # Start development server (watch mode)
+pnpm build                  # Compile TypeScript
 
 # Code Quality
-npm run lint                # Run ESLint
-npm run format              # Format with Prettier
-npm run format:check        # Check formatting without changes
-npm run type-check          # TypeScript strict check
+pnpm lint                   # Run ESLint
+pnpm format                 # Format with Prettier
+pnpm format:check           # Check formatting without changes
+pnpm typecheck              # TypeScript strict check
 
 # Testing
-npm run test                # Run Vitest
-npm run test:watch          # Watch mode
-npm run test:coverage       # Coverage report
+pnpm test                   # Run Vitest
+pnpm test:watch             # Watch mode
+pnpm test:coverage          # Coverage report
 ```
-
-> **Note:** Package manager TBD — will be confirmed during architecture phase. Commands above are illustrative.
 
 ## Architecture & Documentation
 
 **Source of Truth**: `docs/architecture.md` (to be drafted interactively)
 
-**Seed Document**: `docs/mcp-integration-strategy.md` — captures initial thinking from the deck-localiser POC.
+**Seed Document**: `.claude/docs/mcp-integration-strategy.md` — captures initial thinking from the deck-localiser POC.
 
 Refer to architecture docs for:
 
@@ -137,7 +136,7 @@ Every boundary requires Zod validation:
 1. Read `docs/architecture.md` to understand system design
 2. Use appropriate skill based on task context
 3. Follow code style guidelines strictly
-4. Run `npm run lint && npm run format` before committing
+4. Run `pnpm lint && pnpm format` before committing
 5. Request code review with the senior-code-reviewer agent for significant changes
 
 ## Claude Code Features
