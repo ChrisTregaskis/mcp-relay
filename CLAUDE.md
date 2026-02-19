@@ -1,0 +1,149 @@
+# Claude Code Configuration: MCP Hub
+
+## Project Overview
+
+MCP Hub — a custom Model Context Protocol server that exposes shared AI tools (image generation, document processing, integrations) to any Claude-based workflow: Cowork, Claude Code, or API agents. This is a **server/library project**, not a UI application.
+
+## Tech Stack
+
+- **Runtime**: Node.js (LTS)
+- **Language**: TypeScript (strict mode)
+- **MCP Framework**: `@modelcontextprotocol/sdk`
+- **Validation**: Zod for all tool inputs, outputs, and configuration
+- **Testing**: Vitest
+- **Formatting**: Prettier (2-space indentation)
+- **Language variant**: British English throughout
+
+## Project Structure
+
+```
+mcp-hub/
+├── docs/                          # Source of truth (committed)
+│   ├── mcp-integration-strategy.md  # Seed strategy document
+│   └── architecture.md             # System design (TBD)
+├── src/                            # Application code (TBD — after architecture approval)
+├── .claude/                        # Claude Code configuration
+└── [root config files]
+```
+
+> **Note:** This is a server/library project. No React, no Next.js, no Tailwind. Focus is on MCP protocol, tool handlers, and API integrations.
+
+## Code Style Guidelines
+
+### Language & Formatting
+
+- **English variant**: British English throughout (colour, localise, organise, behaviour, etc.)
+- **Indentation**: 2 spaces
+- **TypeScript**: Strict mode enabled, no `any` types without justification
+- **Semicolons**: Required
+- **Trailing commas**: ES5
+
+### Principles
+
+- **SOLID Principles**: Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, Dependency Inversion
+- **OWASP**: Particularly relevant here — input validation, secure API key management, output encoding, rate limiting, no secrets in code
+- **Zod Validation**: All tool inputs, API responses, configuration, and data boundaries use Zod schemas
+- **Error Handling**: Explicit error handling with typed results, no silent failures
+
+### MCP Server Conventions
+
+- Each tool handler is a self-contained module with its own Zod input/output schemas
+- Tool handlers follow a consistent pattern: validate → execute → format response
+- Tool handlers receive a `ToolContext` object (server + config) — not the server directly
+- API keys and secrets are loaded from environment variables with Zod validation
+- Tool metadata (name, description, inputSchema, annotations) is co-located with the handler
+- **Every Zod input field must have `.describe()`** with an LLM-friendly description — include example values for non-obvious fields
+- **Every tool must include `annotations`** (`readOnlyHint`, `destructiveHint`, `openWorldHint`, `idempotentHint`)
+- Input schemas are plain objects of Zod fields (not wrapped in `z.object()`) — the SDK handles wrapping
+- All external API calls include timeout handling and retry logic
+
+### API & Security (OWASP Focus)
+
+- **Input validation**: Zod on all tool inputs — no trusting MCP client data
+- **API key management**: Environment variables only, validated at startup, never logged
+- **Output encoding**: Sanitise responses before returning to MCP clients
+- **Rate limiting**: Centralised per-tool rate limiting to prevent cost overruns
+- **Error messages**: Generic messages to clients, detailed logging server-side
+- **No secrets in code**: Use `.env` files (gitignored) with Zod-validated config loaders
+
+## Key Commands
+
+```bash
+# Development
+npm run dev                 # Start development server (watch mode)
+npm run build               # Compile TypeScript
+
+# Code Quality
+npm run lint                # Run ESLint
+npm run format              # Format with Prettier
+npm run format:check        # Check formatting without changes
+npm run type-check          # TypeScript strict check
+
+# Testing
+npm run test                # Run Vitest
+npm run test:watch          # Watch mode
+npm run test:coverage       # Coverage report
+```
+
+> **Note:** Package manager TBD — will be confirmed during architecture phase. Commands above are illustrative.
+
+## Architecture & Documentation
+
+**Source of Truth**: `docs/architecture.md` (to be drafted interactively)
+
+**Seed Document**: `docs/mcp-integration-strategy.md` — captures initial thinking from the deck-localiser POC.
+
+Refer to architecture docs for:
+
+- MCP server design and tool registration
+- Transport layer decisions (stdio vs HTTP/SSE)
+- API integration patterns
+- Authentication and authorisation approach
+- Rate limiting and cost management
+- Deployment architecture
+
+## Git Operations
+
+Git operations are user-controlled. Claude Code will not:
+
+- Create branches
+- Add/commit files
+- Push changes
+- Merge pull requests
+
+Users manage all git workflows directly.
+
+## Validation Standards
+
+### Zod Schemas
+
+Every boundary requires Zod validation:
+
+- MCP tool input parameters
+- MCP tool output responses
+- External API responses (Nanobanana, Jira, Azure DevOps, etc.)
+- Environment configuration
+- Server startup configuration
+
+### API Keys & Secrets
+
+- Store in `.env` (gitignored)
+- Load via `process.env` with Zod validation at startup
+- Never log or expose in error messages or MCP responses
+- Rotate centrally — the MCP server is the single point of credential management
+
+## Development Workflow
+
+1. Read `docs/architecture.md` to understand system design
+2. Use appropriate skill based on task context
+3. Follow code style guidelines strictly
+4. Run `npm run lint && npm run format` before committing
+5. Request code review with the senior-code-reviewer agent for significant changes
+
+## Claude Code Features
+
+- **Plans**: Available for multi-step implementation; outlined before execution
+- **Agents**: Senior code reviewer available for autonomous review
+- **Skills**: Domain skills to be populated as architecture solidifies
+- **Spikes**: Technical exploration documents in `.claude/spikes/`
+- **Session continuity**: `_project-state.md` maintains context across sessions

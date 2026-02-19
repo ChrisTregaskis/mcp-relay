@@ -30,6 +30,7 @@ CLAUDE.local.md
 .claude/plans/
 .claude/spikes/
 .claude/docs/
+.claude/prompts/
 
 # Test artifacts
 coverage/

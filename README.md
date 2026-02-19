@@ -1,4 +1,4 @@
-# MCP Server POC
+# MCP Hub
 
 A proof-of-concept custom [Model Context Protocol](https://modelcontextprotocol.io) (MCP) server that exposes shared AI tools to any Claude-based workflow — Cowork, Claude Code, or API agents.
 
@@ -34,7 +34,7 @@ See `docs/mcp-integration-strategy.md` for the full background and vision.
 ## Project Structure
 
 ```
-mcp-server-poc/
+mcp-hub/
 ├── docs/                          # Source of truth (committed)
 │   ├── mcp-integration-strategy.md  # Seed strategy document
 │   └── architecture.md             # System design (TBD)
