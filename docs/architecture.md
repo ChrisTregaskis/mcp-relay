@@ -1,4 +1,4 @@
-# Architecture: MCP Server POC
+# Architecture: MCP Hub
 
 **Status:** Draft v0.1
 **Last Updated:** 2026-02-12
@@ -75,7 +75,7 @@ Team Member                    MCP Server                     External Services
   MCP Clients                      MCP Server                    External Services
  ┌─────────────────┐          ┌──────────────────────┐       ┌─────────────────────┐
  │ Claude Code     │──stdio──►│                      │       │                     │
- │ Claude Desktop  │──stdio──►│   mcp-server-poc     │──────►│  Jira REST API v3   │
+ │ Claude Desktop  │──stdio──►│   mcp-hub            │──────►│  Jira REST API v3   │
  │ VS Code         │──stdio──►│                      │       │  (Cloud)            │
  │ Cowork          │──HTTP───►│  ┌────────────────┐  │       └─────────────────────┘
  │ Other MCP       │──HTTP───►│  │ Tool Registry  │  │
@@ -345,7 +345,7 @@ The `createServer()` factory is transport-agnostic — the clean seam between to
 export function createServer(config: ServerConfig): McpServer {
   const server = new McpServer(
     {
-      name: 'mcp-server-poc',
+      name: 'mcp-hub',
       version: '1.0.0',
     },
     {
@@ -353,7 +353,7 @@ export function createServer(config: ServerConfig): McpServer {
         tools: {},
       },
       instructions: `
-MCP Server POC provides shared AI tooling for teams.
+MCP Hub provides shared AI tooling for teams.
 Available integrations: Jira (issue CRUD and JQL search)
 and Brand Guidelines (per-project config from S3).
 Tools use shared credentials — individual users do not
@@ -608,7 +608,7 @@ const ServerConfigSchema = z.object({
 | Formatting      | Prettier                     | 2-space indent, trailing commas ES5, semicolons required                                                                                        |
 | Linting         | ESLint + `typescript-eslint` | Strict TypeScript rules, no `any` without justification                                                                                         |
 | Build           | `tsc` (TypeScript compiler)  | ESM output to `dist/`; no bundler needed                                                                                                        |
-| Git Hooks       | Husky                        | Pre-commit: lint + format. Pre-push: lint + format + type-check + build                                                                         |
+| Git Hooks       | Husky                        | Pre-commit: lint + format. Pre-push: lint + format + typecheck + build                                                                          |
 | Module Format   | ESM                          | `"type": "module"` in `package.json`; `NodeNext` module resolution                                                                              |
 
 ### Testing (Deferred)
@@ -622,7 +622,7 @@ Testing is deferred for the POC to reduce overhead during rapid iteration. Zod v
 **Git hooks (Husky):** Included.
 
 - **Pre-commit:** `pnpm lint && pnpm format:check`
-- **Pre-push:** `pnpm lint && pnpm format:check && pnpm type-check && pnpm build`
+- **Pre-push:** `pnpm lint && pnpm format:check && pnpm typecheck && pnpm build`
 
 **CI/CD:** Deferred — no pipeline until there is something to deploy.
 
@@ -645,7 +645,7 @@ Testing is deferred for the POC to reduce overhead during rapid iteration. Zod v
 ## 8. Project Structure
 
 ```
-mcp-server-poc/
+mcp-hub/
 ├── docs/
 │   ├── architecture.md              # System design (this document)
 │   └── roadmap.md                   # Phase roadmap (single source of truth)
@@ -684,7 +684,7 @@ mcp-server-poc/
 │
 ├── .husky/
 │   ├── pre-commit                   # pnpm lint && pnpm format:check
-│   └── pre-push                     # pnpm lint && pnpm format:check && pnpm type-check && pnpm build
+│   └── pre-push                     # pnpm lint && pnpm format:check && pnpm typecheck && pnpm build
 │
 ├── .claude/                          # Claude Code configuration
 │

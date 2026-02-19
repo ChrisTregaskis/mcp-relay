@@ -1,4 +1,6 @@
 // Loads environment variables, validates with Zod, exports typed config — fail-fast on invalid config
+import { ConfigurationError } from '../shared/errors.js';
+
 import { ServerConfigSchema } from './schemas.js';
 
 import type { ServerConfig } from './schemas.js';
@@ -25,7 +27,11 @@ export function loadConfig(): ServerConfig {
       .map((issue) => `  - ${issue.path.join('.')}: ${issue.message}`)
       .join('\n');
 
-    throw new Error(`Configuration validation failed:\n${formatted}`);
+    throw new ConfigurationError(`Configuration validation failed:\n${formatted}`, {
+      toolName: 'server',
+      operation: 'loadConfig',
+      correlationId: 'startup',
+    });
   }
 
   return result.data;

@@ -1,5 +1,5 @@
 {
-  "name": "mcp-server-poc",
+  "name": "mcp-hub",
   "version": "0.1.0",
   "description": "Custom MCP server exposing shared AI tools (Jira, brand guidelines) to any MCP-compatible client",
   "type": "module",

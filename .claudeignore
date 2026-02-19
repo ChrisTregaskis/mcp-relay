@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+
+# Test artifacts
+coverage/
+test-results/
+
+# Large binaries
+*.pdf
+*.docx
+*.pptx
+*.zip
+*.tar.gz
+
+# Media files
+*.mp4
+*.mov
+*.avi
+
+# Logs
+*.log
+npm-debug.log*
+
+# Lock files (large)
+package-lock.json
+pnpm-lock.yaml

@@ -9,7 +9,7 @@ import type { ToolContext } from './types.js';
 export function createServer(config: ServerConfig): McpServer {
   const server = new McpServer(
     {
-      name: 'mcp-server-poc',
+      name: 'mcp-hub',
       version: '0.1.0',
     },
     {
@@ -17,7 +17,7 @@ export function createServer(config: ServerConfig): McpServer {
         tools: {},
       },
       instructions: `
-MCP Server POC provides shared AI tooling for teams.
+MCP Hub provides shared AI tooling for teams.
 Available integrations: Jira (issue CRUD and JQL search)
 and Brand Guidelines (per-project config from S3).
 Tools use shared credentials — individual users do not
