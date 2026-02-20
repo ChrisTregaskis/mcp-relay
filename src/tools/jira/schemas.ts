@@ -80,8 +80,16 @@ export function extractTextFromAdf(node: unknown): string {
     case 'heading':
       return childTexts.join('');
     case 'bulletList':
-    case 'orderedList':
       return childTexts.join('\n');
+    case 'orderedList':
+      return content
+        .map((child, index) => {
+          const text = extractTextFromAdf(child);
+
+          // Replace the leading "- " from listItem with a numbered prefix
+          return text.startsWith('- ') ? `${index + 1}. ${text.slice(2)}` : `${index + 1}. ${text}`;
+        })
+        .join('\n');
     case 'listItem':
       return `- ${childTexts.join('')}`;
     case 'codeBlock':

@@ -3,7 +3,9 @@ import crypto from 'node:crypto';
 
 import { z } from 'zod';
 
+import type { ErrorMetadata } from '../../shared/errors.js';
 import { log } from '../../shared/logger.js';
+import type { RateLimitConfig } from '../../shared/rate-limit.js';
 import { parseResponse } from '../../shared/validation.js';
 import type { ToolContext } from '../../types.js';
 
@@ -11,6 +13,12 @@ import { jiraRequest } from './client.js';
 import { JiraIssueResponseSchema, formatJiraIssue } from './schemas.js';
 
 const TOOL_NAME = 'jira_get_issue';
+
+/** Rate limit config — Atlassian Cloud allows ~100 req/min. Enforcement deferred to Phase 2. */
+export const RATE_LIMIT: RateLimitConfig = {
+  maxRequests: 60,
+  windowMs: 60_000,
+};
 
 /** Fields requested from the Jira API — keeps response lean (avoids 200+ field bloat). */
 const JIRA_FIELDS = [
@@ -51,7 +59,7 @@ export function registerGetIssue(context: ToolContext): void {
       const correlationId = crypto.randomUUID();
       const startTime = Date.now();
 
-      const metadata = {
+      const metadata: ErrorMetadata = {
         toolName: TOOL_NAME,
         operation: 'getIssue',
         correlationId,
@@ -64,9 +72,10 @@ export function registerGetIssue(context: ToolContext): void {
       });
 
       try {
+        const params = new URLSearchParams({ fields: JIRA_FIELDS });
         const result = await jiraRequest({
           config: context.config.jira,
-          path: `/rest/api/3/issue/${encodeURIComponent(issueKey)}?fields=${JIRA_FIELDS}`,
+          path: `/rest/api/3/issue/${encodeURIComponent(issueKey)}?${params.toString()}`,
           metadata,
           notFoundMessage: `Jira issue ${issueKey} was not found. Check the issue key and try again.`,
         });
@@ -74,6 +83,13 @@ export function registerGetIssue(context: ToolContext): void {
         const durationMs = Date.now() - startTime;
 
         if (!result.ok) {
+          log({
+            level: 'warn',
+            message: `Jira request failed for ${issueKey}`,
+            durationMs,
+            ...metadata,
+          });
+
           return result.mcpResponse;
         }
 
