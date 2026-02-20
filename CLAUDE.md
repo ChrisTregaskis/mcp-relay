@@ -1,8 +1,8 @@
-# Claude Code Configuration: MCP Hub
+# Claude Code Configuration: MCP Relay
 
 ## Project Overview
 
-MCP Hub — a custom Model Context Protocol server that exposes shared AI tools (image generation, document processing, integrations) to any Claude-based workflow: Cowork, Claude Code, or API agents. This is a **server/library project**, not a UI application.
+MCP Relay — a custom Model Context Protocol server that exposes shared AI tools (image generation, document processing, integrations) to any Claude-based workflow: Cowork, Claude Code, or API agents. This is a **server/library project**, not a UI application.
 
 ## Tech Stack
 
@@ -17,7 +17,7 @@ MCP Hub — a custom Model Context Protocol server that exposes shared AI tools 
 ## Project Structure
 
 ```
-mcp-hub/
+mcp-relay/
 ├── docs/                          # Source of truth (committed)
 │   └── architecture.md             # System design (v0.1)
 ├── .claude/

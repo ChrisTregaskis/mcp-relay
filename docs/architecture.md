@@ -1,4 +1,4 @@
-# Architecture: MCP Hub
+# Architecture: MCP Relay
 
 **Status:** Draft v0.1
 **Last Updated:** 2026-02-12
@@ -75,7 +75,7 @@ Team Member                    MCP Server                     External Services
   MCP Clients                      MCP Server                    External Services
  ┌─────────────────┐          ┌──────────────────────┐       ┌─────────────────────┐
  │ Claude Code     │──stdio──►│                      │       │                     │
- │ Claude Desktop  │──stdio──►│   mcp-hub            │──────►│  Jira REST API v3   │
+ │ Claude Desktop  │──stdio──►│   mcp-relay            │──────►│  Jira REST API v3   │
  │ VS Code         │──stdio──►│                      │       │  (Cloud)            │
  │ Cowork          │──HTTP───►│  ┌────────────────┐  │       └─────────────────────┘
  │ Other MCP       │──HTTP───►│  │ Tool Registry  │  │
@@ -345,7 +345,7 @@ The `createServer()` factory is transport-agnostic — the clean seam between to
 export function createServer(config: ServerConfig): McpServer {
   const server = new McpServer(
     {
-      name: 'mcp-hub',
+      name: 'mcp-relay',
       version: '1.0.0',
     },
     {
@@ -353,7 +353,7 @@ export function createServer(config: ServerConfig): McpServer {
         tools: {},
       },
       instructions: `
-MCP Hub provides shared AI tooling for teams.
+MCP Relay provides shared AI tooling for teams.
 Available integrations: Jira (issue CRUD and JQL search)
 and Brand Guidelines (per-project config from S3).
 Tools use shared credentials — individual users do not
@@ -645,7 +645,7 @@ Testing is deferred for the POC to reduce overhead during rapid iteration. Zod v
 ## 8. Project Structure
 
 ```
-mcp-hub/
+mcp-relay/
 ├── docs/
 │   ├── architecture.md              # System design (this document)
 │   └── roadmap.md                   # Phase roadmap (single source of truth)

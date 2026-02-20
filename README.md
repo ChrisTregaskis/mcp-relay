@@ -1,4 +1,4 @@
-# MCP Hub
+# MCP Relay
 
 A custom [Model Context Protocol](https://modelcontextprotocol.io) (MCP) server that exposes shared AI tools to any MCP-compatible client — Claude Code, Cowork, or API agents.
 
@@ -30,7 +30,7 @@ A reusable **team AI tooling layer** built as an MCP server. Rather than each de
 ## Project Structure
 
 ```
-mcp-hub/
+mcp-relay/
 ├── src/
 │   ├── config/                    # Zod-validated config loader
 │   ├── shared/                    # Errors, logger, HTTP client, rate-limit
@@ -58,8 +58,8 @@ mcp-hub/
 ### Setup
 
 ```bash
-git clone git@github.com:ChrisTregaskis/mcp-hub.git
-cd mcp-hub
+git clone git@github.com:ChrisTregaskis/mcp-relay.git
+cd mcp-relay
 pnpm install
 cp .env.example .env               # Fill in credentials
 ```
