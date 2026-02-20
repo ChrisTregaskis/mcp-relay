@@ -1,6 +1,6 @@
-// Placeholder Zod schemas for Jira API response validation
 import { z } from 'zod';
 
+// Zod schemas and helpers for Jira API response validation based on API version: v3
 export const JiraIssueResponseSchema = z.object({
   key: z.string(),
   fields: z.object({
@@ -8,12 +8,124 @@ export const JiraIssueResponseSchema = z.object({
     status: z.object({
       name: z.string(),
     }),
+    issuetype: z.object({
+      name: z.string(),
+    }),
+    priority: z
+      .object({
+        name: z.string(),
+      })
+      .nullable(),
     assignee: z
       .object({
         displayName: z.string(),
+        emailAddress: z.string().optional(),
       })
       .nullable(),
+    description: z.unknown().nullable(),
+    created: z.string(),
+    updated: z.string(),
   }),
 });
 
 export type JiraIssueResponse = z.infer<typeof JiraIssueResponseSchema>;
+
+/**
+ * Recursively walks an Atlassian Document Format (ADF) node tree and
+ * concatenates all text content into a plain string.
+ *
+ * Handles: doc, paragraph, heading, text, hardBreak, bulletList,
+ * orderedList, listItem, codeBlock, blockquote.
+ * Degrades gracefully for unknown node types by recursing into children.
+ */
+export function extractTextFromAdf(node: unknown): string {
+  if (node === null || node === undefined) {
+    return '';
+  }
+
+  if (typeof node !== 'object') {
+    return '';
+  }
+
+  const record = node as Record<string, unknown>;
+  const type = record['type'];
+
+  if (typeof type !== 'string') {
+    return '';
+  }
+
+  // Leaf node — plain text
+  if (type === 'text') {
+    return typeof record['text'] === 'string' ? record['text'] : '';
+  }
+
+  // Leaf node — line break
+  if (type === 'hardBreak') {
+    return '\n';
+  }
+
+  // Container nodes — recurse into content array
+  const content = record['content'];
+
+  if (!Array.isArray(content)) {
+    return '';
+  }
+
+  const childTexts = content.map(extractTextFromAdf);
+
+  switch (type) {
+    case 'doc':
+      return childTexts.join('\n\n');
+    case 'paragraph':
+    case 'heading':
+      return childTexts.join('');
+    case 'bulletList':
+    case 'orderedList':
+      return childTexts.join('\n');
+    case 'listItem':
+      return `- ${childTexts.join('')}`;
+    case 'codeBlock':
+      return childTexts.join('');
+    case 'blockquote':
+      return childTexts
+        .join('')
+        .split('\n')
+        .map((line) => `> ${line}`)
+        .join('\n');
+    default:
+      // Unknown node type — best-effort: recurse into children
+      return childTexts.join('');
+  }
+}
+
+/**
+ * Formats a validated Jira issue response into a human-readable text block.
+ * Null-safe: displays "None", "Unassigned", or "No description provided."
+ * for missing optional fields.
+ */
+export function formatJiraIssue(issue: JiraIssueResponse): string {
+  const { key, fields } = issue;
+
+  const priority = fields.priority?.name ?? 'None';
+  const assignee = fields.assignee?.displayName ?? 'Unassigned';
+
+  const descriptionText = fields.description ? extractTextFromAdf(fields.description) : '';
+  const description = descriptionText.trim() || 'No description provided.';
+
+  const lines = [
+    `${key}: ${fields.summary}`,
+    '',
+    `Type:     ${fields.issuetype.name}`,
+    `Status:   ${fields.status.name}`,
+    `Priority: ${priority}`,
+    `Assignee: ${assignee}`,
+    '',
+    `Created:  ${fields.created}`,
+    `Updated:  ${fields.updated}`,
+    '',
+    'Description:',
+    description,
+  ];
+
+  return lines.join('\n');
+}

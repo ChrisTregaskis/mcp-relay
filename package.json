@@ -12,19 +12,22 @@
     "dev:build": "tsc --watch",
     "build": "tsc",
     "lint": "eslint src/",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
+    "format": "prettier --write . && eslint --fix src/",
+    "format:check": "prettier --check . && eslint src/",
     "typecheck": "tsc --noEmit",
+    "inspect": "npx @modelcontextprotocol/inspector node dist/transports/stdio.js",
     "prepare": "husky"
   },
   "packageManager": "pnpm@10.28.1",
   "dependencies": {
     "@aws-sdk/client-s3": "3.989.0",
     "@modelcontextprotocol/sdk": "1.26.0",
+    "dotenv": "^17.3.1",
     "zod": "3.25.76"
   },
   "devDependencies": {
     "@eslint/js": "9.39.2",
+    "@stylistic/eslint-plugin": "^5.9.0",
     "@types/node": "25.2.3",
     "eslint": "9.39.2",
     "husky": "9.1.7",

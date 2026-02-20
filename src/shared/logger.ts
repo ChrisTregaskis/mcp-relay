@@ -1,5 +1,3 @@
-// Structured JSON logger — writes to stderr (stdout reserved for MCP protocol in stdio transport)
-
 type LogLevel = 'info' | 'warn' | 'error';
 
 interface LogEntry {
@@ -34,11 +32,20 @@ const SENSITIVE_KEYS = new Set([
 ]);
 
 function sanitise(value: unknown): unknown {
-  if (value === null || value === undefined) return value;
-  if (typeof value !== 'object') return value;
-  if (Array.isArray(value)) return value.map(sanitise);
+  if (value === null || value === undefined) {
+    return value;
+  }
+
+  if (typeof value !== 'object') {
+    return value;
+  }
+
+  if (Array.isArray(value)) {
+    return value.map(sanitise);
+  }
 
   const result: Record<string, unknown> = {};
+
   for (const [key, val] of Object.entries(value as Record<string, unknown>)) {
     if (SENSITIVE_KEYS.has(key.toLowerCase())) {
       result[key] = '[REDACTED]';
@@ -46,6 +53,7 @@ function sanitise(value: unknown): unknown {
       result[key] = sanitise(val);
     }
   }
+
   return result;
 }
 

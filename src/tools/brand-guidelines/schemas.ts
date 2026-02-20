@@ -1,4 +1,3 @@
-// Placeholder Zod schemas for brand guidelines config — shape TBD during spike S4
 import { z } from 'zod';
 
 export const BrandGuidelinesConfigSchema = z.object({

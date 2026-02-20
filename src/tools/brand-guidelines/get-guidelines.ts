@@ -1,4 +1,3 @@
-// Stub: brand_get_guidelines — fetch brand guidelines for a project from S3
 import { z } from 'zod';
 
 import type { ToolContext } from '../../types.js';
