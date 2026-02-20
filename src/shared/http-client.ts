@@ -1,4 +1,3 @@
-// Thin fetch wrapper with configurable timeout via AbortController
 import { ExternalServiceError } from './errors.js';
 
 import type { ErrorMetadata } from './errors.js';
@@ -9,6 +8,7 @@ const DEFAULT_TIMEOUT_MS = 30_000;
 function safeUrl(raw: string): string {
   try {
     const parsed = new URL(raw);
+
     return `${parsed.origin}${parsed.pathname}`;
   } catch {
     return '<malformed-url>';

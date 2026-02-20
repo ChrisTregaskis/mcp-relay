@@ -1,4 +1,3 @@
-// Registers all Jira tools with the MCP server
 import type { ToolContext } from '../../types.js';
 
 import { registerCreateIssue } from './create-issue.js';

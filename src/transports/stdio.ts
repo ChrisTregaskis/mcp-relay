@@ -1,4 +1,6 @@
 // Entry point: loads config, creates server, connects StdioServerTransport
+import 'dotenv/config';
+
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 
 import { loadConfig } from '../config/index.js';

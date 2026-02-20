@@ -1,5 +1,3 @@
-// Typed error hierarchy for structured error handling across tool handlers
-
 export interface ErrorMetadata {
   toolName: string;
   operation: string;

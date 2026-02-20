@@ -10,9 +10,9 @@ export type { ServerConfig };
 export function loadConfig(): ServerConfig {
   const result = ServerConfigSchema.safeParse({
     jira: {
-      baseUrl: process.env['JIRA_BASE_URL'],
-      userEmail: process.env['JIRA_USER_EMAIL'],
-      apiToken: process.env['JIRA_API_TOKEN'],
+      baseUrl: process.env['JIRA_BASE_URL_MCP_RELAY'],
+      userEmail: process.env['JIRA_USER_EMAIL_MCP_RELAY'],
+      apiToken: process.env['JIRA_API_TOKEN_MCP_RELAY'],
     },
     s3: {
       accessKeyId: process.env['AWS_ACCESS_KEY_ID'],

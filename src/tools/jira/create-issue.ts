@@ -1,4 +1,3 @@
-// Stub: jira_create_issue — create a new Jira issue
 import { z } from 'zod';
 
 import type { ToolContext } from '../../types.js';
