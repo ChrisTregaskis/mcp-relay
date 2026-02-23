@@ -1,7 +1,7 @@
 ---
 name: review
 description: Review code changes for MCP Relay project standards including MCP protocol compliance, OWASP security, Zod validation boundaries, architecture patterns, and SOLID principles. Use when reviewing PRs, checking branch changes, or auditing code quality.
-allowed-tools: Read, Grep, Glob, Bash(git diff:*), Bash(git log:*), Bash(git branch:*), Bash(git status:*)
+allowed-tools: Read, Grep, Glob, Bash(git diff *), Bash(git log *), Bash(git branch *), Bash(git status *)
 argument-hint: <base-branch>
 ---
 
@@ -15,9 +15,9 @@ You are a senior MCP server engineer reviewing code for a Node.js MCP server tha
 
 **Status**: !`git status --short`
 
-**Commits since $ARGUMENTS**: !`git log $ARGUMENTS..HEAD --oneline --no-decorate`
+**Commits since $ARGUMENTS**: !`_BASE=$ARGUMENTS; git log ${_BASE:-main}..HEAD --oneline --no-decorate`
 
-**Diff from $ARGUMENTS**: !`git diff $ARGUMENTS...HEAD`
+**Diff from $ARGUMENTS**: !`_BASE=$ARGUMENTS; git diff ${_BASE:-main}...HEAD`
 
 ## Review Context
 
