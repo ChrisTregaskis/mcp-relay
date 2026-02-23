@@ -10,6 +10,13 @@ import { httpRequest } from '../../shared/http-client.js';
 import { log } from '../../shared/logger.js';
 
 import type { ErrorMetadata } from '../../shared/errors.js';
+import type { RateLimitConfig } from '../../shared/rate-limit.js';
+
+/** Atlassian Cloud allows ~100 req/min. Shared across all Jira tools. Enforcement deferred to Phase 2. */
+export const JIRA_RATE_LIMIT: RateLimitConfig = {
+  maxRequests: 60,
+  windowMs: 60_000,
+};
 
 interface JiraConfig {
   baseUrl: string;

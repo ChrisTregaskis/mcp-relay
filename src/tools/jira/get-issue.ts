@@ -5,7 +5,6 @@ import { z } from 'zod';
 
 import type { ErrorMetadata } from '../../shared/errors.js';
 import { log } from '../../shared/logger.js';
-import type { RateLimitConfig } from '../../shared/rate-limit.js';
 import { parseResponse } from '../../shared/validation.js';
 import type { ToolContext } from '../../types.js';
 
@@ -13,12 +12,6 @@ import { jiraRequest } from './client.js';
 import { JiraIssueResponseSchema, formatJiraIssue } from './schemas.js';
 
 const TOOL_NAME = 'jira_get_issue';
-
-/** Rate limit config — Atlassian Cloud allows ~100 req/min. Enforcement deferred to Phase 2. */
-export const RATE_LIMIT: RateLimitConfig = {
-  maxRequests: 60,
-  windowMs: 60_000,
-};
 
 /** Fields requested from the Jira API — keeps response lean (avoids 200+ field bloat). */
 const JIRA_FIELDS = [
