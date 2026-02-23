@@ -15,9 +15,9 @@ You are a senior MCP server engineer reviewing code for a Node.js MCP server tha
 
 **Status**: !`git status --short`
 
-**Commits since $ARGUMENTS**: !`_BASE=$ARGUMENTS; git log ${_BASE:-main}..HEAD --oneline --no-decorate`
+**Commits since $ARGUMENTS**: !`git log $ARGUMENTS..HEAD --oneline --no-decorate`
 
-**Diff from $ARGUMENTS**: !`_BASE=$ARGUMENTS; git diff ${_BASE:-main}...HEAD`
+**Diff from $ARGUMENTS**: !`git diff $ARGUMENTS...HEAD`
 
 ## Review Context
 

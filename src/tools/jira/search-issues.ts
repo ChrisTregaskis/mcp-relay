@@ -47,6 +47,14 @@ export function registerSearchIssues(context: ToolContext): void {
           .optional()
           .default(50)
           .describe('Maximum number of results to return (1–100)'),
+        startAt: z
+          .number()
+          .min(0)
+          .optional()
+          .default(0)
+          .describe(
+            'Zero-based index of the first result to return, for pagination (e.g. 50 for page 2 with maxResults=50)'
+          ),
       },
       annotations: {
         readOnlyHint: true,
@@ -56,7 +64,7 @@ export function registerSearchIssues(context: ToolContext): void {
       },
     },
     async (args) => {
-      const { jql, maxResults } = args;
+      const { jql, maxResults, startAt } = args;
       const correlationId = crypto.randomUUID();
       const startTime = Date.now();
 
@@ -74,8 +82,9 @@ export function registerSearchIssues(context: ToolContext): void {
 
       try {
         const requestBody = {
-          jql,
+          jql, // User-supplied — safe in JSON body (not URL-interpolated); Jira parses JQL server-side
           maxResults,
+          startAt,
           fields: JIRA_FIELDS,
         };
 

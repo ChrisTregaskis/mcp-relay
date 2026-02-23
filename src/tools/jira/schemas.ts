@@ -32,6 +32,7 @@ export type JiraIssueResponse = z.infer<typeof JiraIssueResponseSchema>;
 
 export const JiraSearchResponseSchema = z.object({
   issues: z.array(JiraIssueResponseSchema),
+  total: z.number().optional(),
   isLast: z.boolean().optional(),
 });
 
@@ -150,7 +151,7 @@ export function formatJiraIssue(issue: JiraIssueResponse): string {
  * Each issue is a compact one-liner; includes a summary count line.
  */
 export function formatJiraSearchResults(response: JiraSearchResponse): string {
-  const { issues, isLast } = response;
+  const { issues, total, isLast } = response;
 
   if (issues.length === 0) {
     return 'No issues found matching the query.';
@@ -158,10 +159,12 @@ export function formatJiraSearchResults(response: JiraSearchResponse): string {
 
   const lines: string[] = [];
 
+  // isLast can be: true (last page), false (more pages), undefined (field absent)
   const moreAvailable = isLast === false;
 
   if (moreAvailable) {
-    lines.push(`Showing ${issues.length} issue(s) (more results available).`);
+    const totalInfo = total !== undefined ? ` of ${total}` : '';
+    lines.push(`Showing ${issues.length}${totalInfo} issue(s) (more results available).`);
   } else {
     lines.push(`Found ${issues.length} issue(s).`);
   }
