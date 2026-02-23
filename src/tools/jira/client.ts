@@ -132,6 +132,11 @@ export async function jiraRequest(options: JiraRequestOptions): Promise<JiraResu
     );
   }
 
+  // 204 No Content — successful mutation with no response body (e.g. PUT update)
+  if (response.status === 204) {
+    return { ok: true, data: null };
+  }
+
   // Parse JSON
   let data: unknown;
   try {
