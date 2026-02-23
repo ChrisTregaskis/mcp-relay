@@ -1,5 +1,11 @@
 import { z } from 'zod';
 
+// Shared validation patterns
+/** Matches Jira issue keys like "PROJ-123". Case-insensitive — Jira normalises to uppercase. */
+export const JIRA_ISSUE_KEY_PATTERN = /^[A-Z][A-Z0-9_]*-\d+$/i;
+export const JIRA_ISSUE_KEY_ERROR =
+  'Invalid Jira issue key format. Expected pattern like "PROJ-123".';
+
 // Zod schemas and helpers for Jira API response validation based on API version: v3
 export const JiraIssueResponseSchema = z.object({
   key: z.string(),
