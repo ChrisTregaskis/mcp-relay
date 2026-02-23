@@ -1,4 +1,3 @@
-// jira_create_issue — create a new Jira issue via REST API v3
 import crypto from 'node:crypto';
 
 import { z } from 'zod';
@@ -23,8 +22,8 @@ export function registerCreateIssue(context: ToolContext): void {
         project: z
           .string()
           .regex(
-            /^[A-Z][A-Z0-9_]*$/i,
-            'Invalid Jira project key format. Expected pattern like "PROJ".'
+            /^[A-Z][A-Z0-9_]*$/,
+            'Invalid Jira project key format. Expected uppercase pattern like "PROJ".'
           )
           .describe('The Jira project key (e.g. "PROJ")'),
         summary: z
@@ -81,6 +80,7 @@ export function registerCreateIssue(context: ToolContext): void {
           method: 'POST',
           body: JSON.stringify({ fields }),
           metadata,
+          notFoundMessage: 'Failed to create issue. The project or issue type may not exist.',
         });
 
         const durationMs = Date.now() - startTime;

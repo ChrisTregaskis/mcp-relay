@@ -47,19 +47,27 @@ export const JiraCreateIssueResponseSchema = z.object({
 export type JiraCreateIssueResponse = z.infer<typeof JiraCreateIssueResponseSchema>;
 
 /**
- * Wraps a plain text string in a minimal Atlassian Document Format (ADF)
+ * Wraps a plain text string in an Atlassian Document Format (ADF)
  * document node suitable for the Jira REST API v3 description field.
+ * Splits on double-newlines to produce separate paragraph nodes.
  */
 export function textToAdf(text: string): Record<string, unknown> {
+  const paragraphs = text
+    .split(/\n{2,}/)
+    .map((block) => block.trim())
+    .filter(Boolean)
+    .map((block) => ({
+      type: 'paragraph',
+      content: [{ type: 'text', text: block }],
+    }));
+
   return {
     type: 'doc',
     version: 1,
-    content: [
-      {
-        type: 'paragraph',
-        content: [{ type: 'text', text }],
-      },
-    ],
+    content:
+      paragraphs.length > 0
+        ? paragraphs
+        : [{ type: 'paragraph', content: [{ type: 'text', text: '' }] }],
   };
 }
 
