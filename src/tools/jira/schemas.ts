@@ -38,6 +38,39 @@ export const JiraSearchResponseSchema = z.object({
 
 export type JiraSearchResponse = z.infer<typeof JiraSearchResponseSchema>;
 
+export const JiraCreateIssueResponseSchema = z.object({
+  id: z.string(),
+  key: z.string(),
+  self: z.string().url(),
+});
+
+export type JiraCreateIssueResponse = z.infer<typeof JiraCreateIssueResponseSchema>;
+
+/**
+ * Wraps a plain text string in an Atlassian Document Format (ADF)
+ * document node suitable for the Jira REST API v3 description field.
+ * Splits on double-newlines to produce separate paragraph nodes.
+ */
+export function textToAdf(text: string): Record<string, unknown> {
+  const paragraphs = text
+    .split(/\n{2,}/)
+    .map((block) => block.trim())
+    .filter(Boolean)
+    .map((block) => ({
+      type: 'paragraph',
+      content: [{ type: 'text', text: block }],
+    }));
+
+  return {
+    type: 'doc',
+    version: 1,
+    content:
+      paragraphs.length > 0
+        ? paragraphs
+        : [{ type: 'paragraph', content: [{ type: 'text', text: '' }] }],
+  };
+}
+
 /**
  * Recursively walks an Atlassian Document Format (ADF) node tree and
  * concatenates all text content into a plain string.
