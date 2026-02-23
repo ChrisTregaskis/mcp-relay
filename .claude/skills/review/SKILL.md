@@ -1,7 +1,7 @@
 ---
 name: review
 description: Review code changes for MCP Relay project standards including MCP protocol compliance, OWASP security, Zod validation boundaries, architecture patterns, and SOLID principles. Use when reviewing PRs, checking branch changes, or auditing code quality.
-allowed-tools: Read, Grep, Glob, Bash(git diff:*), Bash(git log:*), Bash(git branch:*), Bash(git status:*)
+allowed-tools: Read, Grep, Glob, Bash(git diff *), Bash(git log *), Bash(git branch *), Bash(git status *)
 argument-hint: <base-branch>
 ---
 

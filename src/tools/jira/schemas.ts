@@ -30,6 +30,14 @@ export const JiraIssueResponseSchema = z.object({
 
 export type JiraIssueResponse = z.infer<typeof JiraIssueResponseSchema>;
 
+export const JiraSearchResponseSchema = z.object({
+  issues: z.array(JiraIssueResponseSchema),
+  total: z.number().optional(),
+  isLast: z.boolean().optional(),
+});
+
+export type JiraSearchResponse = z.infer<typeof JiraSearchResponseSchema>;
+
 /**
  * Recursively walks an Atlassian Document Format (ADF) node tree and
  * concatenates all text content into a plain string.
@@ -134,6 +142,44 @@ export function formatJiraIssue(issue: JiraIssueResponse): string {
     'Description:',
     description,
   ];
+
+  return lines.join('\n');
+}
+
+/**
+ * Formats a validated Jira search response into a human-readable text block.
+ * Each issue is a compact one-liner; includes a summary count line.
+ */
+export function formatJiraSearchResults(response: JiraSearchResponse): string {
+  const { issues, total, isLast } = response;
+
+  if (issues.length === 0) {
+    return 'No issues found matching the query.';
+  }
+
+  const lines: string[] = [];
+
+  // isLast can be: true (last page), false (more pages), undefined (field absent)
+  const moreAvailable = isLast === false;
+
+  if (moreAvailable) {
+    const totalInfo = total !== undefined ? ` of ${total}` : '';
+    lines.push(`Showing ${issues.length}${totalInfo} issue(s) (more results available).`);
+  } else {
+    lines.push(`Found ${issues.length} issue(s).`);
+  }
+
+  lines.push('');
+
+  for (const issue of issues) {
+    const { key, fields } = issue;
+    const priority = fields.priority?.name ?? 'None';
+    const assignee = fields.assignee?.displayName ?? 'Unassigned';
+
+    lines.push(
+      `${key}  [${fields.issuetype.name}]  ${fields.status.name}  P:${priority}  @${assignee}  — ${fields.summary}`
+    );
+  }
 
   return lines.join('\n');
 }
