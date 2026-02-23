@@ -9,7 +9,12 @@ import { parseResponse } from '../../shared/validation.js';
 import type { ToolContext } from '../../types.js';
 
 import { jiraRequest } from './client.js';
-import { JiraIssueResponseSchema, formatJiraIssue } from './schemas.js';
+import {
+  JIRA_ISSUE_KEY_ERROR,
+  JIRA_ISSUE_KEY_PATTERN,
+  JiraIssueResponseSchema,
+  formatJiraIssue,
+} from './schemas.js';
 
 const TOOL_NAME = 'jira_get_issue';
 
@@ -34,10 +39,7 @@ export function registerGetIssue(context: ToolContext): void {
       inputSchema: {
         issueKey: z
           .string()
-          .regex(
-            /^[A-Z][A-Z0-9_]*-\d+$/i,
-            'Invalid Jira issue key format. Expected pattern like "PROJ-123".'
-          )
+          .regex(JIRA_ISSUE_KEY_PATTERN, JIRA_ISSUE_KEY_ERROR)
           .describe('The Jira issue key (e.g. "PROJ-123")'),
       },
       annotations: {

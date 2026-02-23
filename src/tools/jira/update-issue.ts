@@ -8,7 +8,7 @@ import { log } from '../../shared/logger.js';
 import type { ToolContext } from '../../types.js';
 
 import { jiraRequest } from './client.js';
-import { textToAdf } from './schemas.js';
+import { JIRA_ISSUE_KEY_ERROR, JIRA_ISSUE_KEY_PATTERN, textToAdf } from './schemas.js';
 
 const TOOL_NAME = 'jira_update_issue';
 
@@ -20,10 +20,7 @@ export function registerUpdateIssue(context: ToolContext): void {
       inputSchema: {
         issueKey: z
           .string()
-          .regex(
-            /^[A-Z][A-Z0-9_]*-\d+$/,
-            'Invalid Jira issue key format. Expected pattern like "PROJ-123".'
-          )
+          .regex(JIRA_ISSUE_KEY_PATTERN, JIRA_ISSUE_KEY_ERROR)
           .describe('The Jira issue key to update (e.g. "PROJ-123")'),
         fields: z
           .record(z.unknown())
@@ -65,7 +62,7 @@ export function registerUpdateIssue(context: ToolContext): void {
 
         const result = await jiraRequest({
           config: context.config.jira,
-          path: `/rest/api/3/issue/${issueKey}`,
+          path: `/rest/api/3/issue/${encodeURIComponent(issueKey)}`,
           method: 'PUT',
           body: JSON.stringify({ fields: processedFields }),
           metadata,
